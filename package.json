@@ -1,0 +1,30 @@
+{
+  "name": "hogwarts-v2",
+  "version": "1.0.0",
+  "description": "Hogwarts Course Management System API",
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/emilyndk/hogwarts-v2.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/emilyndk/hogwarts-v2/issues"
+  },
+  "homepage": "https://github.com/emilyndk/hogwarts-v2#readme",
+  "dependencies": {
+    "dotenv": "^18.0.8",
+    "express": "^5.3.0",
+    "pg": "^8.23.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.14"
+  }
+}

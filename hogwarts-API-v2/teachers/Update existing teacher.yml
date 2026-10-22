@@ -1,0 +1,15 @@
+info:
+  name: Update existing teacher
+  type: http
+  seq: 5
+
+http:
+  method: PUT
+  url: http://localhost:3002/teachers/1
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
