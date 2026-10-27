@@ -1,38 +1,17 @@
 import express from "express";
 import { db } from "./src/config/db.js";
+import * as housesRepository from "./repositories/houses.repository.js";
+import * as housesController from "./controllers/houses.controller.js";
 
 const app = express();
 
 app.use(express.json());
 
-app.get("/houses", async (req, res) => {
-  try {
-    const result = await db.query("SELECT * FROM houses");
-    res.json(result.rows);
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: "Kunne ikke hente huse" });
-  }
-});
-
-app.get("/houses/:id", async (req, res) => {
-  const { id } = req.params;
-  try {
-    const result = await db.query("SELECT * FROM houses WHERE id = $1", [id]);
-    if (result.rows.length === 0) {
-      return res.status(404).json({ error: "Hus ikke fundet" });
-    }
-    res.json(result.rows[0]);
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: "Kunne ikke hente huset" });
-  }
-});
+app.get("/houses", housesController.getAllHouses);
+app.get("/houses/:id", housesController.getSingleHouse);
 
 app.get("/teachers", async (req, res) => {
   try {
-    const result = await db.query("SELECT * FROM teachers");
-    res.json(result.rows);
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: "Kunne ikke hente teachers" });
