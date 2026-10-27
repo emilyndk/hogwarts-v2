@@ -178,9 +178,6 @@ app.delete("/students/:id", async (req, res) => {
   }
 });
 
-// ==========================================
-// 4. COURSES ENDPOINTS
-// ==========================================
 app.get("/courses", async (req, res) => {
   try {
     const query = `
@@ -312,9 +309,6 @@ app.delete("/courses/:id", async (req, res) => {
   }
 });
 
-// ==========================================
-// START SERVER
-// ==========================================
 const PORT = process.env.PORT || 3002;
 app.listen(PORT, () => {
   console.log(`Hogwarts API kører på http://localhost:${PORT}`);
