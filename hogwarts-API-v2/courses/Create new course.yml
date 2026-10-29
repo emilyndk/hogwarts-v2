@@ -5,7 +5,13 @@ info:
 
 http:
   method: POST
-  url: http://localhost:3002/courses
+  url: http://localhost:3002/courses/
+  body:
+    type: json
+    data: |
+      {
+        "fk_teachers": 2
+      }
   auth: inherit
 
 settings:
@@ -13,4 +19,3 @@ settings:
   timeout: 0
   followRedirects: true
   maxRedirects: 5
-​

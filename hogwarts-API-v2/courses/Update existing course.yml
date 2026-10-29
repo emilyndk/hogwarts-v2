@@ -5,7 +5,12 @@ info:
 
 http:
   method: PUT
-  url: http://localhost:3002/courses/1
+  url: http://localhost:3002/courses/3
+  body:
+    type: json
+    data: |
+      {
+       "fk_teachers": 2}
   auth: inherit
 
 settings:
