@@ -5,10 +5,10 @@ info:
 
 http:
   method: POST
-  url: http://localhost:3002/courses/11/students/7
+  url: http://localhost:3002/courses/1/students
   body:
     type: json
-    data: ""
+    data: '{"student_id": 2}'
   auth: inherit
 
 settings:
@@ -16,4 +16,3 @@ settings:
   timeout: 0
   followRedirects: true
   maxRedirects: 5
-​

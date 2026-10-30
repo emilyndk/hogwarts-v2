@@ -6,6 +6,11 @@ info:
 http:
   method: PUT
   url: http://localhost:3002/teachers/1
+  body:
+    type: json
+    data: |-
+      {"teacher_name": "McGonnagall",
+      "fk_house": 3}
   auth: inherit
 
 settings:

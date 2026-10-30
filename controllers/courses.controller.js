@@ -38,6 +38,24 @@ export async function createCourse(req, res) {
   }
 }
 
+export async function updateCourse(req, res) {
+  try {
+    const { id } = req.params;
+    const { course_name, fk_teachers } = req.body;
+    const updatedCourse = await coursesRepository.updateCourse(
+      id,
+      course_name,
+      fk_teachers,
+    );
+    if (!updatedCourse) {
+      return res.status(404).json({ error: "Kunne ikke opdatere course" });
+    }
+    res.json(updatedCourse);
+  } catch (err) {
+    res.status(500).json({ error: "Kunne ikke opdatere course" });
+  }
+}
+
 export async function updateCourseTeacher(req, res) {
   try {
     const { id } = req.params;
@@ -70,6 +88,7 @@ export async function addStudentToCourse(req, res) {
 
 export async function removeStudentFromCourse(req, res) {
   try {
+    // den henter både id og studentId fra URL da man ikke skriver student_id som JSON body i en DELETE request ligesom man gjorde i PUT requesten
     const { id, studentId } = req.params;
     const removed = await coursesRepository.removeStudentFromCourse(
       id,

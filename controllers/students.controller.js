@@ -41,7 +41,9 @@ export async function createStudent(req, res) {
 
 export async function updateStudent(req, res) {
   try {
+    // den får id fra det url klienten sender
     const { id } = req.params;
+    // den får de andre værdier fra det klienten skriver i JSON body'en
     const { student_name, student_year, fk_house } = req.body;
     const updatedStudent = await studentsRepository.updateStudent(
       id,

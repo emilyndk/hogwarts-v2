@@ -6,6 +6,8 @@ export async function getAllTeachers() {
 }
 
 export async function getTeacherById(id) {
+  // "Sæt værdien af min id-variabel ind på pladsen for $1". Værdien af [id] får den fra controller
+
   const result = await db.query("SELECT * FROM teachers WHERE id = $1", [id]);
 
   if (result.rowCount === 0) {

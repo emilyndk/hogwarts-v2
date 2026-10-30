@@ -10,7 +10,8 @@ http:
     type: json
     data: |
       {
-       "fk_teachers": 2}
+        "course_name": "ok"
+      }
   auth: inherit
 
 settings:
