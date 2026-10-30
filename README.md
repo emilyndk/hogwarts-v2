@@ -2,7 +2,9 @@
 
 ## Endpoints
 
-Test endpointsne ved at bruge Bruno eller Insomnia
+Test endpointsne ved at bruge Bruno eller Insomnia. Vælg et endpoint, fx GET /teachers og tryk send for at se listen af data
+For at teste POST / PUT-endpoints: Gå ind under fanen Body, derefter vælg JSON, og skriv fx {"teacher_name": "Severus Snape", "fk_house": 1}. Tryk send
+Ved ruter der kræver et ID f.eks. GET /teachers/:id eller PUT /courses/:id/teacher, erstat :id i stien med et rigtigt ID fra databasen (f.eks. http://localhost:3002/teachers/1).
 
 ### Houses
 
