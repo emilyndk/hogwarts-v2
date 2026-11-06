@@ -1,4 +1,7 @@
 import { db } from "../src/config/db.js";
+
+// henter alle courses, og da courses har en relation til teachers pga foreign key fk_teachers kolonnen bruger jeg LEFT JOIN for at hente teacherens navn i setedet for bare et id tal. Jeg omdøber dem ved at bruge AS (fx course_name AS name), så de ser pæne ud, når de sendes til klienten.
+
 export async function getAllCourses() {
   const query = `
     SELECT 
@@ -8,21 +11,27 @@ export async function getAllCourses() {
     FROM courses 
     LEFT JOIN teachers ON courses.fk_teachers = teachers.id
   `;
+  // db.query er en funktion/metode der gør at Node.js kan snakke direkte med min database. det er bindeledet mellem min javascript kode og min sql database
+  // denne forbindelse har en indbygget funktion der hedder .query()
+  // i praksis fungerer den sådan at den tager en SQL streng som ovenstående og sender den over til databasen. Den håndterer også parametre som placeholders fx sørger for at værdien fra fx [id, name] kommer ind på de rigtige pladser som $1 og $2
   const result = await db.query(query);
   return result.rows;
 }
 
+// henter courset og teacher ved hjælp af $1, så værdien af id skal stå i stedet for $1 da vi skriver [id]. Og da der står (id) efter funktionens navn getCourseById(id) der står id i funktionene parameter, så er det i controlleren at den henter det rigtige id som klienten sendte i URL, og controlleren giver så værdien af id tilbage her til repository. Altså controlleren kører denne funktion og putter id ind som parameter, og controlleren ved hvad værdien af id er pga den har hentet det fra req.params. req er requesten fra klienten og params er den url klienten har sendt i dens request fx GET http://localhost:3002/courses/7 så er 7 værdien af id
 export async function getCourseById(id) {
   const courseQuery = `
     SELECT 
       courses.id, 
-      courses.course_name AS name, 
+      courses.course_name AS name,
       teachers.teacher_name AS teacher_name
     FROM courses
     LEFT JOIN teachers ON courses.fk_teachers = teachers.id
     WHERE courses.id = $1
   `;
+
   const courseResult = await db.query(courseQuery, [id]);
+  // hvis courset ikke findes (length === 0) returnerer den null
   if (courseResult.rows.length === 0) return null;
 
   const studentsQuery = `
