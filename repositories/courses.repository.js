@@ -1,6 +1,7 @@
 import { db } from "../src/config/db.js";
 
-// henter alle courses, og da courses har en relation til teachers pga foreign key fk_teachers kolonnen bruger jeg LEFT JOIN for at hente teacherens navn i setedet for bare et id tal. Jeg omdøber dem ved at bruge AS (fx course_name AS name), så de ser pæne ud, når de sendes til klienten.
+// henter alle courses, og da courses har en relation til teachers pga foreign key fk_teachers kolonnen bruger jeg LEFT JOIN for at hente teacherens navn i setedet for bare et id tal.
+// Jeg omdøber dem ved at bruge AS (fx course_name AS name), så de ser pæne ud, når de sendes til klienten.
 
 export async function getAllCourses() {
   const query = `
@@ -13,7 +14,8 @@ export async function getAllCourses() {
   `;
   // db.query er en funktion/metode der gør at Node.js kan snakke direkte med min database. det er bindeledet mellem min javascript kode og min sql database
   // denne forbindelse har en indbygget funktion der hedder .query()
-  // i praksis fungerer den sådan at den tager en SQL streng som ovenstående og sender den over til databasen. Den håndterer også parametre som placeholders fx sørger for at værdien fra fx [id, name] kommer ind på de rigtige pladser som $1 og $2
+  // i praksis fungerer den sådan at den tager en SQL streng som ovenstående og sender den over til databasen.
+  // Den håndterer også parametre som placeholders fx sørger for at værdien fra fx [id, name] kommer ind på de rigtige pladser som $1 og $2
   const result = await db.query(query);
   return result.rows;
 }

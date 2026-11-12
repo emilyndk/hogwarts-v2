@@ -3,6 +3,7 @@ import housesRouter from "./routers/houses.router.js";
 import teachersRouter from "./routers/teachers.router.js";
 import studentsRouter from "./routers/students.router.js";
 import coursesRouter from "./routers/courses.router.js";
+import errorHandler from "./errorhandling/errorhandler.js";
 
 const app = express();
 
@@ -17,8 +18,10 @@ app.use("/courses", coursesRouter);
 
 // fortæller at den skal vælge porten der er sat i miljøvariablen PORT. Hvis der ikke er en tildelt port skal den bruge port 3002
 
-const PORT = process.env.PORT || 3002;
+const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   // fortæller at serveren kører og hvilken port den kører på, enten 3002 eller den port der er sat i miljøvariablen PORT
   console.log(`Hogwarts API kører på http://localhost:${PORT}`);
 });
+
+app.use(errorHandler);

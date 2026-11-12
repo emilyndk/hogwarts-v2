@@ -1,27 +1,19 @@
 import * as housesRepository from "../repositories/houses.repository.js";
+import HTTPError from "../errorhandling/HTTPError.js";
 
 export async function getAllHouses(req, res) {
-  try {
-    const allHouses = await housesRepository.getAllHouses();
-    res.json(allHouses);
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: "Kunne ikke hente houses", code: err.code });
-  }
+  const allHouses = await housesRepository.getAllHouses();
+  res.json(allHouses);
 }
 
 export async function getSingleHouse(req, res) {
-  try {
-    const { id } = req.params;
-    const house = await housesRepository.getHouseById(id);
+  const { id } = req.params;
 
-    if (house) {
-      res.status(200).json(house);
-    } else {
-      res.status(404).json({ error: "Hus ikke fundet" });
-    }
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: "Kunne ikke hente house" });
+  const house = await housesRepository.getHouseById(id);
+
+  if (house) {
+    return res.status(200).json(house);
   }
+
+  throw new HTTPError(404, "House does not exist");
 }

@@ -5,8 +5,13 @@ info:
 
 http:
   method: GET
-  url: http://localhost:3002/teachers/2
+  url: "{{browseURL}}/teachers/hss"
   auth: inherit
+
+runtime:
+  variables:
+    - name: browseURL
+      value: http://localhost:3002
 
 settings:
   encodeUrl: true
