@@ -1,5 +1,6 @@
 import * as studentsRepository from "../repositories/students.repository.js";
 import HTTPError from "../errorhandling/HTTPError.js";
+import { UpdateStudentDTO, CreateStudentDTO } from "../dtos/students.dto.js";
 
 export async function getAllStudents(req, res) {
   const students = await studentsRepository.getAllStudents();
@@ -16,30 +17,24 @@ export async function getSingleStudent(req, res) {
 }
 
 export async function createStudent(req, res) {
-  const { student_name, student_year, fk_house } = req.body;
-  const newStudent = await studentsRepository.createStudent(
-    student_name,
-    student_year,
-    fk_house,
-  );
+  const data = req.body;
+  const studentData = CreateStudentDTO.parse(data);
+
+  const newStudent = await studentsRepository.createStudent(studentData);
   res.status(200).json(newStudent);
 }
 
 export async function updateStudent(req, res) {
   // den får id fra det url klienten sender
   const { id } = req.params;
+  const data = req.body;
+  const student = UpdateStudentDTO.parse(data);
+  const updated = await studentsRepository.updateStudent.apply(id, student);
   // den får de andre værdier fra det klienten skriver i JSON body'en
-  const { student_name, student_year, fk_house } = req.body;
-  const updatedStudent = await studentsRepository.updateStudent(
-    id,
-    student_name,
-    student_year,
-    fk_house,
-  );
-  if (!updatedStudent) {
+  if (!updated) {
     throw new HTTPError(404, "Student not found");
   }
-  res.status(200).json(updatedStudent);
+  res.status(200).json(updated);
 }
 
 export async function deleteStudent(req, res) {

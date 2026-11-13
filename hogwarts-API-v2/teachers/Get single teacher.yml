@@ -5,7 +5,7 @@ info:
 
 http:
   method: GET
-  url: "{{browseURL}}/teachers/hss"
+  url: "{{browseURL}}/teachers/2"
   auth: inherit
 
 runtime:

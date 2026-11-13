@@ -1,6 +1,7 @@
 //importerer alt det der ligger i filen teachers.repository.js og giver det navnet teachersRepository
 import * as teachersRepository from "../repositories/teachers.repository.js";
 import HTTPError from "../errorhandling/HTTPError.js";
+import { CreateTeacherDTO, UpdateTeacherDTO } from "../dtos/teachers.dto.js";
 
 //jeg skriver ikke en 500 statuskode fejl her hvis den ikke kan hente teachers, fordi det har jeg allerede sagt den skal gøre i errorhandler.js
 // da jeg skrev let statusCode = err.statusCode || 500; sagde jeg at statuskoden skal være fejlobjektets statuskode som jeg ville skrive sådan "throw new HTTPError(404, "...")"
@@ -35,23 +36,20 @@ export async function createTeacher(req, res) {
   //(skriver body i stedet for params fordi den kigger i body'en af requesten og ikke i URL'en da det er en POST request. Dataen skrives som JSON i body fanen i Bruno)
   // Da Express modtog JSON-tekst pakker den det ud og lægger det ind i en boks der hedder req.body.
   // Nu trækker controlleren værdierne af teacher_name og fk_house som ligger i req.body ud
-  const { teacher_name, fk_house } = req.body;
+  const data = req.body;
+  const teacherData = CreateTeacherDTO.parse(data);
   // laver en variabel newTeacher der indeholder dataen for den teacher der lige er blevet oprettet ved at sige at den skal gå ind i teachersRepository (teachers.repository.js) og hente createTeacher funktionen der ligger derinde
-  const newTeacher = await teachersRepository.createTeacher(
-    teacher_name,
-    fk_house,
-  );
+  const newTeacher = await teachersRepository.createTeacher(teacherData);
   res.status(201).json(newTeacher);
 }
 
 export async function updateTeacher(req, res) {
   const { id } = req.params;
-  const { teacher_name, fk_house } = req.body;
-  const updated = await teachersRepository.updateTeacher(
-    id,
-    teacher_name,
-    fk_house,
-  );
+  const data = req.body;
+
+  const teacher = UpdateTeacherDTO.parse(data);
+
+  const updated = await teachersRepository.updateTeacher(id, teacher);
   if (!updated) {
     throw new HTTPError(404, "Teacher ikke fundet");
   }

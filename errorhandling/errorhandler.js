@@ -8,6 +8,7 @@ export default (err, req, res, next) => {
   let error = "internal server error";
 
   let message = err.message || "Something went wrong";
+  const statusCode = err.statusCode || 500;
 
   if (statusCode == 404) {
     error = "not found";

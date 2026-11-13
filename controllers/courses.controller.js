@@ -1,5 +1,10 @@
 import * as coursesRepository from "../repositories/courses.repository.js";
 import HTTPError from "../errorhandling/HTTPError.js";
+import {
+  CreateCourseDTO,
+  UpdateCourseDTO,
+  AddStudentDTO,
+} from "../dtos/courses.dto.js";
 
 export async function getAllCourses(req, res) {
   const courses = await coursesRepository.getAllCourses();
@@ -16,26 +21,21 @@ export async function getSingleCourse(req, res) {
 }
 
 export async function createCourse(req, res) {
-  const { course_name, fk_teachers } = req.body;
-  const newCourse = await coursesRepository.createCourse(
-    course_name,
-    fk_teachers,
-  );
+  const data = req.body;
+  const courseData = CreateCourseDTO.parse(data);
+  const newCourse = await coursesRepository.createCourse(courseData);
   res.status(201).json(newCourse);
 }
 
 export async function updateCourse(req, res) {
   const { id } = req.params;
-  const { course_name, fk_teachers } = req.body;
-  const updatedCourse = await coursesRepository.updateCourse(
-    id,
-    course_name,
-    fk_teachers,
-  );
-  if (!updatedCourse) {
+  const data = req.body;
+  const course = UpdateCourseDTO.parse(data);
+  const updated = await coursesRepository.updateCourse(id, course);
+  if (!updated) {
     throw new HTTPError(404, "Kunne ikke opdatere course");
   }
-  res.json(updatedCourse);
+  res.json(updated);
 }
 
 export async function updateCourseTeacher(req, res) {
@@ -50,12 +50,10 @@ export async function updateCourseTeacher(req, res) {
 
 export async function addStudentToCourse(req, res) {
   const { id } = req.params;
-  const { student_id } = req.body;
+  const { student_id } = AddStudentDTO.parse(req.body);
   await coursesRepository.addStudentToCourse(id, student_id);
+
   res.status(201).json({ message: "Student tilføjet til course" });
-  if (!student_id) {
-    throw new HTTPError(400, "Student ID is required");
-  }
 }
 
 export async function removeStudentFromCourse(req, res) {

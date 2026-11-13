@@ -4,6 +4,12 @@ import { db } from "../src/config/db.js";
 // Jeg omdøber dem ved at bruge AS (fx course_name AS name), så de ser pæne ud, når de sendes til klienten.
 
 export async function getAllCourses() {
+  // jeg har ikk en kolonne der hedder name men jeg bruger AS beder jeg databasen om at give course_name et kælenavn/alias kun i det øjeblik den sender svaret tilbage
+  // så i min database hedder kolonnen stadig course_name men når sql requesten kører siger jeg at den skal sende det her svar ud til controller skal du omdøbe nøglen så den hedder name i stedet for course_name
+  // det gør man ofte for at json objektet der sendes til klienten kortere/pænere
+  // Når Express sender dataen tilbage til Bruno, vil JSON-objektet nu se sådan her ud: {"id": 1, "name": "Potions", "teacher_name": "Severus Snape"}
+  // hvis jeg ik skrev courses.course_name AS name ville der have stået  "course_name": "Potions"
+
   const query = `
     SELECT 
       courses.id, 
@@ -51,30 +57,57 @@ export async function getCourseById(id) {
   return courseData;
 }
 
-export async function createCourse(name, teacher_id) {
-  const result = await db.query(
-    "INSERT INTO courses (course_name, fk_teachers) VALUES ($1, $2) RETURNING *",
-    [name, teacher_id],
-  );
-  return result.rows[0];
-}
-export async function updateCourse(id, course_name, fk_teachers) {
-  const result = await db.query(
-    "UPDATE courses SET course_name = $1, fk_teachers = $2 WHERE id = $3 RETURNING *",
-    [course_name, fk_teachers, id],
-  );
+export async function createCourse(course) {
+  const query = `
+    INSERT INTO courses (course_name, fk_teachers, type, level, school_year) 
+    VALUES ($1, $2, $3, $4, $5) 
+    RETURNING *;
+  `;
+
+  const values = [
+    course.course_name,
+    course.fk_teachers,
+    course.type,
+    course.level,
+    course.school_year,
+  ];
+
+  const result = await db.query(query, values);
   // tager det første element ud af arrayet og sender det tilbage
-  // forklaring til mig selv: result.rows indeholder ikke alle rækker i hele courses tabellen men den indeholder den/de rækker som denne SQL-forespørgsel lige har rørt og returneret. Vi ved at der kun ligger et objekt i arrayet fordi vi bruger WHERE til at finde rækken by id, og siden id er unik ved vi at der kun vil komme en række. Men den pakker stadig altid resultatet ind iet array, og derfor skal vi pakke det ud, og det gør vi ved at sige den kun skal returnere række 0 altså den første række. Vi ved det er den første række fordi det er den eneste række.
+  // forklaring til mig selv: result.rows indeholder ikke alle rækker i hele courses tabellen men den indeholder den/de rækker som denne SQL-forespørgsel lige har rørt og returneret.
+  // Vi ved at der kun ligger et objekt i arrayet fordi vi bruger WHERE til at finde rækken by id, og siden id er unik ved vi at der kun vil komme en række. Men den pakker stadig altid resultatet ind iet array,
+  // og derfor skal vi pakke det ud, og det gør vi ved at sige den kun skal returnere række 0 altså den første række.
+  // Vi ved det er den første række fordi det er den eneste række.
 
   return result.rows[0];
 }
 
-export async function updateCourseTeacher(id, teacher_id) {
-  const result = await db.query(
-    // $1 og $2 er placeholders. Jeg fortæller den hvad der skal stå på $1 og $2's plads da jeg derefter skriver [teacher_id, id]. Den tager det i rækkefølge
-    "UPDATE courses SET fk_teachers = $1 WHERE id = $2 RETURNING *",
-    [teacher_id, id],
-  );
+export async function updateCourse(id, course) {
+  // $1 og $2 er placeholders. Jeg fortæller den hvad der skal stå på $1 og $2's plads da jeg derefter skriver [teacher_id, id]. Den tager det i rækkefølge
+
+  const query = `
+    UPDATE courses 
+    SET 
+      course_name = $1, 
+      fk_teachers = $2, 
+      type = $3, 
+      level = $4, 
+      school_year = $5 
+    WHERE id = $6 
+    RETURNING *;
+  `;
+
+  const values = [
+    course.course_name,
+    course.fk_teachers,
+    course.type,
+    course.level,
+    course.school_year,
+    id,
+  ];
+
+  const result = await db.query(query, values);
+
   return result.rows[0];
 }
 

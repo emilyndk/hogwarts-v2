@@ -18,11 +18,21 @@ export async function createStudent(student_name, student_year, fk_house) {
   return result.rows[0];
 }
 
-export async function updateStudent(id, student_name, student_year, fk_house) {
-  const result = await db.query(
-    "UPDATE students SET student_name = $1, student_year = $2, fk_house = $3 WHERE id = $4 RETURNING *",
-    [student_name, student_year, fk_house, id],
-  );
+export async function updateStudent(id, student) {
+  const query = `
+    UPDATE students 
+    SET student_name = $1, student_year = $2, fk_house = $3 
+    WHERE id = $4 
+    RETURNING *;
+  `;
+  const values = [
+    student.student_name,
+    student.student_year,
+    student.fk_house,
+    id,
+  ];
+
+  const result = await db.query(query, values);
   return result.rows[0];
 }
 
