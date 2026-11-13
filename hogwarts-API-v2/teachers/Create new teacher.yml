@@ -6,6 +6,16 @@ info:
 http:
   method: POST
   url: http://localhost:3002/teachers
+  body:
+    type: json
+    data: |
+      {
+        "teacher_name": "ofafsl",
+        "fk_house": 1,
+        "employment_start": "2026-11-14",
+        "currently_active": true,
+        "deceased": false
+      }
   auth: inherit
 
 settings:
@@ -13,4 +23,3 @@ settings:
   timeout: 0
   followRedirects: true
   maxRedirects: 5
-​

@@ -10,7 +10,11 @@ http:
     type: json
     data: |
       {
-        "fk_teachers": 2
+        "course_name": "m",
+        "fk_teachers": 3,
+        "type": "core",
+        "level": "OWL",
+        "school_year": 7
       }
   auth: inherit
 
@@ -19,4 +23,3 @@ settings:
   timeout: 0
   followRedirects: true
   maxRedirects: 5
-​

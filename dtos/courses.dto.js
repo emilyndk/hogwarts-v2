@@ -12,7 +12,9 @@ import { z } from "zod";
 const courseSchema = z.object({
   course_name: z.string().min(1, "Navn skal udfyldes"),
   fk_teachers: z.number().int().positive().optional(),
-  type: z.enum(["core", "elective", "extra-curricular"]),
+  type: z.enum(["core", "elective", "extra-curricular"], {
+    message: "Typen skal være enten core, elective eller extra-curricular",
+  }),
   level: z.enum(["OWL", "NEWT"]),
   school_year: z.number().int().min(1).max(7),
 });
