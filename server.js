@@ -4,6 +4,7 @@ import teachersRouter from "./routers/teachers.router.js";
 import studentsRouter from "./routers/students.router.js";
 import coursesRouter from "./routers/courses.router.js";
 import examsRouter from "./routers/exams.router.js";
+import gradesRouter from "./routers/grades.router.js";
 import errorHandler from "./errorhandling/errorhandler.js";
 
 const app = express();
@@ -16,6 +17,7 @@ app.use("/houses", housesRouter);
 app.use("/teachers", teachersRouter);
 app.use("/students", studentsRouter);
 app.use("/courses", coursesRouter);
+app.use("/grades", gradesRouter);
 app.use("/exams", examsRouter);
 
 // fortæller at den skal vælge porten der er sat i miljøvariablen PORT. Hvis der ikke er en tildelt port skal den bruge port 3002
